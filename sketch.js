@@ -45,11 +45,28 @@ function draw() {
   // 臉部辨識
   if (predictions.length > 0) {
     const keypoints = predictions[0].scaledMesh;
-    const [x, y] = keypoints[94];
+
     noFill();
     stroke(255, 0, 0);
     strokeWeight(4);
-    ellipse(x, y, 100, 100);
+
+    if (gestureLabel === "剪刀") {
+      // 鼻子 (168)
+      const [x, y] = keypoints[168];
+      ellipse(x, y, 60, 60);
+    } else if (gestureLabel === "石頭") {
+      // 兩眼 (左眼 33, 右眼 263)
+      const [lx, ly] = keypoints[33];
+      const [rx, ry] = keypoints[263];
+      ellipse(lx, ly, 40, 40);
+      ellipse(rx, ry, 40, 40);
+    } else if (gestureLabel === "布") {
+      // 臉頰 (左臉頰 234, 右臉頰 454)
+      const [lx, ly] = keypoints[234];
+      const [rx, ry] = keypoints[454];
+      ellipse(lx, ly, 40, 40);
+      ellipse(rx, ry, 40, 40);
+    }
   }
 
   // 手部辨識
