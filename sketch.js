@@ -77,7 +77,7 @@ function draw() {
     noStroke();
     textSize(32);
     textAlign(LEFT, TOP);
-    text(gestureLabel, 10, 10);
+    text("手勢：" + gestureLabel, 10, 10);
   }
 }
 
@@ -101,7 +101,8 @@ function getGesture(prediction) {
   let extended = 0;
   for (let i = 1; i < tips.length; i++) {
     const tip = landmarks[tips[i]];
-    if (dist(tip[0], tip[1], palm[0], palm[1]) > 60) {
+    // 將 60 改為 45，讓判斷更靈敏
+    if (dist(tip[0], tip[1], palm[0], palm[1]) > 45) {
       extended++;
     }
   }
