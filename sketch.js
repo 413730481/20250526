@@ -40,6 +40,10 @@ function handModelReady() {
 }
 
 function draw() {
+  // 鏡像畫面
+  push();
+  translate(width, 0);
+  scale(-1, 1);
   image(video, 0, 0, width, height);
 
   // 臉部辨識
@@ -53,41 +57,42 @@ function draw() {
     if (gestureLabel === "剪刀") {
       // 鼻子 (168)
       const [x, y] = keypoints[168];
-      ellipse(x, y, 60, 60);
+      ellipse(width - x, y, 60, 60); // x座標鏡像
     } else if (gestureLabel === "石頭") {
       // 兩眼 (左眼 33, 右眼 263)
       const [lx, ly] = keypoints[33];
       const [rx, ry] = keypoints[263];
-      ellipse(lx, ly, 40, 40);
-      ellipse(rx, ry, 40, 40);
+      ellipse(width - lx, ly, 40, 40);
+      ellipse(width - rx, ry, 40, 40);
     } else if (gestureLabel === "布") {
       // 臉頰 (左臉頰 234, 右臉頰 454)
       const [lx, ly] = keypoints[234];
       const [rx, ry] = keypoints[454];
-      ellipse(lx, ly, 40, 40);
-      ellipse(rx, ry, 40, 40);
+      ellipse(width - lx, ly, 40, 40);
+      ellipse(width - rx, ry, 40, 40);
     }
   }
 
   // 手部辨識
   if (handPredictions.length > 0) {
     const landmarks = handPredictions[0].landmarks;
-    drawHand(landmarks);
+    drawHandMirror(landmarks);
     fill(0, 200, 0);
     noStroke();
     textSize(32);
     textAlign(LEFT, TOP);
     text("手勢：" + gestureLabel, 10, 10);
   }
+  pop();
 }
 
-// 畫出手部關鍵點
-function drawHand(landmarks) {
+// 畫出手部關鍵點（鏡像）
+function drawHandMirror(landmarks) {
   for (let i = 0; i < landmarks.length; i++) {
     const [x, y] = landmarks[i];
     fill(0, 0, 255);
     noStroke();
-    ellipse(x, y, 10, 10);
+    ellipse(width - x, y, 10, 10);
   }
 }
 
